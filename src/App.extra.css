@@ -1,0 +1,119 @@
+/* Shared accessibility and interaction polish for the greenhouse visual system. */
+:where(button, a, input, textarea, select):focus-visible {
+    outline: 3px solid #7163b8;
+    outline-offset: 3px;
+}
+
+.idea-card:hover .card-actions,
+.idea-card:focus-within .card-actions {
+    display: flex;
+}
+
+.auth-form .password-toggle input {
+    width: auto;
+    margin: 0;
+    accent-color: #7163b8;
+}
+
+.primary-button:disabled,
+.outline-button:disabled {
+    cursor: not-allowed;
+    opacity: .58;
+    transform: none;
+}
+
+button:disabled { cursor: not-allowed; }
+
+/* Gentle motion: like ideas finding their orbit, never motion for motion's sake. */
+.scroll-reveal {
+    opacity: 0;
+    transform: translateY(26px);
+    transition: opacity .72s cubic-bezier(.2, .7, .2, 1), transform .72s cubic-bezier(.2, .7, .2, 1);
+}
+.scroll-reveal.is-visible { opacity: 1; transform: translateY(0); }
+.hero.scroll-reveal { transition-duration: .9s; }
+.hero.is-visible .hero-copy-block > * { animation: copy-arrives .65s both cubic-bezier(.2, .7, .2, 1); }
+.hero.is-visible .hero-copy-block > :nth-child(1) { animation-delay: .12s; }
+.hero.is-visible .hero-copy-block > :nth-child(2) { animation-delay: .2s; }
+.hero.is-visible .hero-copy-block > :nth-child(3) { animation-delay: .3s; }
+.hero.is-visible .hero-copy-block > :nth-child(4) { animation-delay: .4s; }
+.hero.is-visible .hero-copy-block > :nth-child(5) { animation-delay: .5s; }
+.hero.is-visible .hero-art img { animation: art-float 8s ease-in-out .35s infinite; }
+.hero.is-visible .hero-note-wrap { animation: note-float 6s ease-in-out 1s infinite; }
+.hero-gallery { isolation: isolate; }
+.hero-gallery::before {
+    position: absolute;
+    z-index: -1;
+    inset: 3% 5% 12% 3%;
+    border: 1px dashed #7163b85e;
+    border-radius: 50%;
+    content: '';
+    transform: rotate(-17deg);
+}
+.orbit-spark { position: absolute; z-index: 3; display: grid; place-items: center; color: #f17668; pointer-events: none; }
+.orbit-spark-one { top: 2%; left: 9%; font-size: 23px; animation: spark-orbit 9s linear infinite, spark-blink 2.8s ease-in-out infinite; }
+.orbit-spark-two { right: 3%; bottom: 24%; color: #7163b8; font-size: 27px; animation: spark-orbit 11s linear infinite reverse, spark-blink 3.4s ease-in-out .8s infinite; }
+.hero-note-wrap { transition: box-shadow .25s ease; }
+.hero-note-wrap:hover { box-shadow: 0 20px 42px #29264532; }
+.primary-button { position: relative; overflow: hidden; }
+.primary-button::after {
+    position: absolute;
+    top: -40%; bottom: -40%; left: -55%; width: 28%;
+    background: linear-gradient(90deg, transparent, #ffffff42, transparent);
+    content: '';
+    transform: rotate(20deg);
+    transition: left .55s ease;
+}
+.primary-button:hover::after { left: 130%; }
+.hero-copy-block > .primary-button span:last-child { transition: transform .2s ease; }
+.hero-copy-block > .primary-button:hover span:last-child { transform: translate(3px, -2px); }
+.brand-mark { transition: border-radius .25s ease, rotate .25s ease, background .25s ease; }
+.brand:hover .brand-mark, .auth-brand:hover .brand-mark { border-radius: 50%; background: #e5ff8a; rotate: 45deg; }
+.idea-card .avatar { transition: transform .25s ease, border-radius .25s ease, background .25s ease; }
+.idea-card:hover .avatar { border-radius: 50%; background: #d6f36a; transform: rotate(-9deg) scale(1.08); }
+.auth-visual::before { animation: halo-drift 18s ease-in-out infinite alternate; }
+.auth-art { translate: 0 0; animation: auth-float 8s ease-in-out infinite; }
+.auth-sticker { animation: sticker-bob 5.5s ease-in-out 1s infinite; transition: box-shadow .2s ease; }
+.auth-sticker:hover { box-shadow: 0 18px 34px #17152d65; }
+.auth-form-top { animation: copy-arrives .6s .1s both cubic-bezier(.2, .7, .2, 1); }
+.auth-form > label, .auth-form > .form-error, .auth-form > .auth-submit, .auth-form > .auth-switch, .auth-form > .auth-footnote {
+    animation: copy-arrives .55s both cubic-bezier(.2, .7, .2, 1);
+}
+.auth-form > label:nth-of-type(1) { animation-delay: .16s; }
+.auth-form > label:nth-of-type(2) { animation-delay: .23s; }
+.auth-form > label:nth-of-type(3) { animation-delay: .3s; }
+.auth-form > .auth-submit { animation-delay: .36s; }
+.auth-form > .auth-switch { animation-delay: .42s; }
+.auth-form > .auth-footnote { animation-delay: .48s; }
+.topbar { animation: navbar-arrives .55s both cubic-bezier(.2, .7, .2, 1); }
+.topbar nav a { transition: color .18s ease, translate .18s ease; }
+.topbar nav a:hover { translate: 0 -2px; }
+.profile-button { transition: color .2s ease, background .2s ease, transform .2s ease, box-shadow .2s ease; }
+.profile-button:hover { box-shadow: 0 7px 20px #29264530; }
+.process-steps article { transition: transform .25s ease; }
+.process-steps article:hover { transform: translateY(-5px); }
+.process-steps article > span { display: inline-block; transition: rotate .25s ease, color .25s ease; }
+.process-steps article:hover > span { color: var(--lime); rotate: -8deg; }
+.filters button, .card-actions button, .pagination button, .outline-button { transition: color .18s ease, background .18s ease, border-color .18s ease, transform .18s ease; }
+.vote-button { transition: transform .18s ease, background .18s ease, box-shadow .18s ease; }
+.vote-button:not(:disabled):hover { box-shadow: 0 4px 14px #a8c34f54; }
+
+@keyframes copy-arrives { from { opacity: 0; transform: translateY(13px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes navbar-arrives { from { opacity: 0; translate: 0 -8px; } to { opacity: 1; translate: 0 0; } }
+@keyframes art-float { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-8px) rotate(.35deg); } }
+@keyframes note-float { 0%, 100% { translate: 0 0; } 50% { translate: 0 -7px; } }
+@keyframes auth-float { 0%, 100% { translate: 0 0; } 50% { translate: 0 -12px; } }
+@keyframes sticker-bob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -5px; } }
+@keyframes spark-orbit { from { rotate: 0deg; } to { rotate: 360deg; } }
+@keyframes spark-blink { 0%, 100% { opacity: .55; scale: .84; } 50% { opacity: 1; scale: 1.12; } }
+@keyframes halo-drift { from { transform: translate3d(-12px, -8px, 0) scale(.97); } to { transform: translate3d(30px, 22px, 0) scale(1.04); } }
+
+@media (prefers-reduced-motion: reduce) {
+    .scroll-reveal, .scroll-reveal.is-visible { opacity: 1; transform: none; transition: none; }
+    .hero.is-visible .hero-copy-block > *, .hero.is-visible .hero-art img, .hero.is-visible .hero-note-wrap,
+    .orbit-spark, .auth-visual::before, .auth-art, .auth-sticker, .auth-form-top,
+    .auth-form > label, .auth-form > .form-error, .auth-form > .auth-submit,
+    .auth-form > .auth-switch, .auth-form > .auth-footnote, .topbar { animation: none !important; }
+    .primary-button::after { display: none; }
+    .process-steps article:hover { transform: none; }
+}

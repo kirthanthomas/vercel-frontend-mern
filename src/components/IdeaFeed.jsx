@@ -1,0 +1,29 @@
+import { Link } from "react-router-dom";
+import { domains, statuses } from "../constants";
+import IdeaCard from "./IdeaCard";
+import ScrollReveal from "./ScrollReveal";
+
+function IdeaFeed({ ideas, pagination, filters, onFiltersChange, onDelete, onVote, token, user, loading, error, onRetry }) {
+    const updateFilter = (name, value) => onFiltersChange({ ...filters, [name]: value, page: 1 });
+    const clearFilters = () => onFiltersChange({ search: "", domain: "", status: "", sort: "newest", page: 1 });
+    const firstResult = pagination.total ? (pagination.page - 1) * pagination.limit + 1 : 0;
+    const lastResult = Math.min(pagination.page * pagination.limit, pagination.total);
+
+    return <>
+        <ScrollReveal as="section" className="hero"><div className="hero-copy-block"><p className="eyebrow"><span className="eyebrow-spark">✳</span> A COMMUNITY IDEA GARDEN</p><h1>What if we<br />made campus<br /><em>a little better?</em></h1><p className="hero-copy">Big change starts with someone noticing a small thing. This is where campus ideas find their people.</p><Link className="primary-button" to="/submit"><span>Plant an idea</span><span aria-hidden="true">↗</span></Link><p className="hero-footnote"><span className="online-dot"></span> A little room for every bright idea</p></div><div className="hero-gallery"><figure className="hero-art"><img src="/idea-greenhouse.svg" alt="A colorful illustration of a campus greenhouse with orbiting sketches and new leaves" /><figcaption><span>SPARK / 001</span><p>A place to grow<br /><strong>what comes next.</strong></p></figcaption></figure><div className="hero-note-wrap"><span className="hero-note-kicker">THE COMMUNITY GROWS HERE</span><div className="hero-note"><span>✳</span><p>Notice a need.<br /><strong>Imagine a better way.</strong></p></div></div><span className="hero-orbit-label">IDEAS IN GOOD COMPANY <i>↗</i></span><span className="orbit-spark orbit-spark-one" aria-hidden="true">✳</span><span className="orbit-spark orbit-spark-two" aria-hidden="true">✦</span></div></ScrollReveal>
+        <ScrollReveal as="section" className="how-it-works" id="how-it-works"><p className="eyebrow">FROM OBSERVATION TO IMPACT</p><h2>Make good change happen.</h2><div className="process-steps"><article><span>01</span><h3>Notice a need</h3><p>Describe a real challenge in campus life and who it affects.</p></article><article><span>02</span><h3>Share a solution</h3><p>Explain your idea, the tools it needs, and the change it could make.</p></article><article><span>03</span><h3>Build together</h3><p>Support ideas, connect with collaborators, and follow progress.</p></article></div></ScrollReveal>
+        <ScrollReveal as="section" className="feed-section" id="ideas"><div className="section-heading"><div><p className="eyebrow">THE COMMUNITY BOARD</p><h2>Ideas in motion</h2></div><span className="idea-count">{pagination.total} ideas</span></div>
+            <div className="feed-layout"><aside className="filters"><p className="filter-label">Browse by domain</p>{domains.map((domain) => <button key={domain} type="button" className={(filters.domain || "All ideas") === domain ? "filter-active" : ""} aria-pressed={(filters.domain || "All ideas") === domain} onClick={() => updateFilter("domain", domain === "All ideas" ? "" : domain)}>{domain}</button>)}</aside>
+                <div className="feed-content"><div className="feed-tools"><label className="search-field" htmlFor="idea-search"><span>Search ideas</span><input id="idea-search" type="search" value={filters.search} onChange={(event) => updateFilter("search", event.target.value)} placeholder="Title, problem, or technology" maxLength="100" /></label><label className="tool-select" htmlFor="idea-status"><span>Status</span><select id="idea-status" value={filters.status || "All statuses"} onChange={(event) => updateFilter("status", event.target.value === "All statuses" ? "" : event.target.value)}>{statuses.map((status) => <option key={status}>{status}</option>)}</select></label><label className="tool-select" htmlFor="idea-sort"><span>Sort by</span><select id="idea-sort" value={filters.sort} onChange={(event) => updateFilter("sort", event.target.value)}><option value="newest">Newest first</option><option value="oldest">Oldest first</option><option value="highest">Highest votes</option></select></label></div>
+                    {error && <div className="empty-state" role="alert"><p>{error}</p><button type="button" onClick={onRetry}>Try again</button></div>}
+                    {!error && loading && <div className="empty-state" role="status" aria-live="polite"><p>Loading community ideas…</p></div>}
+                    {!error && !loading && ideas.length === 0 && <div className="empty-state"><p>No ideas match these filters.</p><button type="button" onClick={clearFilters}>Clear filters</button></div>}
+                    {!error && !loading && ideas.map((idea) => <IdeaCard key={idea._id} idea={idea} onDelete={onDelete} onVote={onVote} hasVoted={Boolean(idea.hasVoted)} token={token} user={user} />)}
+                    {!error && !loading && pagination.pages > 1 && <nav className="pagination" aria-label="Idea pages"><button type="button" onClick={() => onFiltersChange({ ...filters, page: pagination.page - 1 })} disabled={pagination.page <= 1}>← Previous</button><span>Showing {firstResult}–{lastResult} of {pagination.total}</span><button type="button" onClick={() => onFiltersChange({ ...filters, page: pagination.page + 1 })} disabled={pagination.page >= pagination.pages}>Next →</button></nav>}
+                </div>
+            </div>
+        </ScrollReveal>
+    </>;
+}
+
+export default IdeaFeed;
